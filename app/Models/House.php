@@ -10,6 +10,7 @@ class House extends Model
     use HasFactory;
 
     protected $fillable = [
+        'location_id',
         'rent_fee',
         'rent_fee_inclusion',
         'installment_period',
@@ -18,4 +19,29 @@ class House extends Model
         'number_of_views',
         'description',
     ];
+
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class);
+    }
+
+    public function landlords()
+    {
+        return $this->belongsToMany(Landlord::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
 }

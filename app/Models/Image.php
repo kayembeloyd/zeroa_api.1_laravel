@@ -10,6 +10,12 @@ class Image extends Model
     use HasFactory;
 
     protected $fillable = [
+        'house_id',
         'path',
     ];
+
+    public function house()
+    {
+        return $this->hasOne(House::class);
+    }
 }

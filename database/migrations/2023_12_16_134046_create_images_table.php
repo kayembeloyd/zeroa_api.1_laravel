@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('path');
+            $table->unsignedBigInteger('house_id')->nullable();
+            $table->string('path')->nullable();
             $table->timestamps();
+
+            $table->index('house_id');
         });
     }
 

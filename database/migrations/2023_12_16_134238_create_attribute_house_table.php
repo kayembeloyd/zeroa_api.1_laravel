@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('house_images', function (Blueprint $table) {
+        Schema::create('attribute_house', function (Blueprint $table) {
+            $table->unsignedBigInteger('attribute_id')->nullable();
             $table->unsignedBigInteger('house_id')->nullable();
-            $table->unsignedBigInteger('image_id')->nullable();
-            $table->timestamps();
         });
     }
 
@@ -23,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('house_images');
+        Schema::dropIfExists('attribute_house');
     }
 };

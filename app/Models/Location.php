@@ -15,4 +15,9 @@ class Location extends Model
         'district',
         'description',
     ];
+
+    public function houses()
+    {
+        return $this->hasMany(House::class);
+    }
 }

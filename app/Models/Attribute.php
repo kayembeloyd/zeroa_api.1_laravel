@@ -12,4 +12,9 @@ class Attribute extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function houses()
+    {
+        return $this->belongsToMany(House::class);
+    }
 }

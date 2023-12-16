@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LandlordContact extends Model
+class Landlord extends Model
 {
     use HasFactory;
 
@@ -13,4 +13,9 @@ class LandlordContact extends Model
         'phone_number',
         'email',
     ];
+
+    public function houses()
+    {
+        return $this->belongsToMany(House::class);
+    }
 }
