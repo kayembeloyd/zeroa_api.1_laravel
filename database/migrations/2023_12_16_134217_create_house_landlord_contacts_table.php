@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('house_landlord_contacts', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('house_id')->nullable();
+            $table->unsignedBigInteger('landlord_contact_id')->nullable();
         });
     }
 

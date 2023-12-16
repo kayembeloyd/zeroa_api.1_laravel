@@ -9,10 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
+    //id	locationName	locationDescription	region	district
     public function up(): void
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('region')->nullable();
+            $table->string('district')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

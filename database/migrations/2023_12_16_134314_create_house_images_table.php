@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('house_images', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('house_id')->nullable();
+            $table->unsignedBigInteger('image_id')->nullable();
             $table->timestamps();
         });
     }
