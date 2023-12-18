@@ -32,6 +32,12 @@ class HousesController extends Controller
 
         $houses = $houses->paginate($house_count);
 
+        foreach ($houses as $house) {
+            $house->location;
+            $house->images;
+            $house->landlords;
+        }
+
         // More filters
         return response([
             'success' => true,
