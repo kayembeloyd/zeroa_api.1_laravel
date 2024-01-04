@@ -25,7 +25,7 @@ class HousesController extends Controller
         else if (isset($params['rent_fee'])) $houses->where('rent_fee', $params['rent_fee']);
 
         // Location
-        if (isset($params['location'])) $houses->where('location_id', isset($params['location']));
+        if (isset($params['location'])) $houses->where('location_id', $params['location']);
 
         // Rooms
         if (isset($params['rooms'])) $houses->whereIn('number_of_rooms', explode(',', $params['rooms']));
