@@ -40,7 +40,11 @@ class HousesController extends Controller
 
             // Rooms Filter
             if (isset($houseFilters->rooms)) {
-                $houses->whereIn('number_of_rooms', explode(',', $houseFilters->rooms));
+                if ($houseFilters->rooms != "") {
+                    if (!in_array("Any", explode(',', $houseFilters->rooms))) {
+                        $houses->whereIn('number_of_rooms', explode(',', $houseFilters->rooms));
+                    }
+                }
             }
 
             // Location filter
