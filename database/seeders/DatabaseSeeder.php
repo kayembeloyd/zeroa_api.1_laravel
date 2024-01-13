@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         echo ("Finished Seeding " . $NUMBER_OF_USERS . " users\n");
 
         // Houses
-        $NUMBER_OF_HOUSES = 50;
+        $NUMBER_OF_HOUSES = 100;
 
         echo ('Seeding houses...\n');
         $houses = \App\Models\House::factory($NUMBER_OF_HOUSES)->create();
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
 
         // Locations
         echo ('Seeding locations...\n');
-        $locations = \App\Models\Location::factory(20)->create();
+        $locations = \App\Models\Location::factory(70)->create();
         foreach ($houses as $house) {
             $house->location()->associate($locations->random());
             $house->save();

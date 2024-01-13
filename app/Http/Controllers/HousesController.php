@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\House;
+use App\Models\Location;
 use Illuminate\Http\Request;
 
 class HousesController extends Controller
@@ -16,19 +17,38 @@ class HousesController extends Controller
 
         $houses = House::orderBy('available_on', 'DESC');
 
-        // Filtration
-        // House count
-        if (isset($params['house_count'])) $house_count = $params['house_count'];
+        // $debugInfo = [];
 
-        // Budget range
-        if (isset($params['rent_fee_min']) && isset($params['rent_fee_max'])) $houses->whereBetween('rent_fee', [$params['rent_fee_min'], $params['rent_fee_max']]);
-        else if (isset($params['rent_fee'])) $houses->where('rent_fee', $params['rent_fee']);
+        // Debugging
+        // if (isset($params['client'])) $debugInfo['client'] = $params['client'];
 
-        // Location
-        if (isset($params['location'])) $houses->where('location_id', $params['location']);
+        // FIlters
+        if (isset($params['house_filters'])) {
+            // $debugInfo['house_filters'] = $params['house_filters'];
 
-        // Rooms
-        if (isset($params['rooms'])) $houses->whereIn('number_of_rooms', explode(',', $params['rooms']));
+            $houseFilters = json_decode($params['house_filters']);
+
+            // House count filter
+            if (isset($houseFilters->houseCount)) $house_count = $houseFilters->houseCount;
+
+            // House Bugdet filter
+            if (isset($houseFilters->rentFeeExact)) {
+                $houses->where('rent_fee', $houseFilters->rentFeeExact);
+            } else if (isset($houseFilters->rentFeeFrom) && isset($houseFilters->rentFeeTo)) {
+                $houses->whereBetween('rent_fee', [$houseFilters->rentFeeFrom, $houseFilters->rentFeeTo]);
+            }
+
+            // Rooms Filter
+            if (isset($houseFilters->rooms)) {
+                $houses->whereIn('number_of_rooms', explode(',', $houseFilters->rooms));
+            }
+
+            // Location filter
+            if (isset($houseFilters->additionalLocations) && !empty($houseFilters->additionalLocations)) {
+                $location_ids = Location::whereIn('name', array_column($houseFilters->additionalLocations, 'desc'))->pluck('id')->toArray();
+                $houses->whereIn('location_id', $location_ids);
+            }
+        }
 
         $houses = $houses->paginate($house_count);
 
@@ -41,7 +61,8 @@ class HousesController extends Controller
         // More filters
         return response([
             'success' => true,
-            'houses' => $houses->toArray()
+            'houses' => $houses->toArray(),
+            // 'debug_info' => $debugInfo
         ], 201);
     }
 }
