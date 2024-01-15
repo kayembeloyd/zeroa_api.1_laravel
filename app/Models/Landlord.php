@@ -18,4 +18,9 @@ class Landlord extends Model
     {
         return $this->belongsToMany(House::class);
     }
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
 }

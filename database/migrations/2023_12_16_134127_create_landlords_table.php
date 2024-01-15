@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('landlords', function (Blueprint $table) {
             $table->id();
-            $table->string('phone_number');
-            $table->string('email')->nullable();
+            $table->string('name');
             $table->timestamps();
         });
     }

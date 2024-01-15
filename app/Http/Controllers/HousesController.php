@@ -17,40 +17,44 @@ class HousesController extends Controller
 
         $houses = House::orderBy('available_on', 'DESC');
 
-        // $debugInfo = [];
-
-        // Debugging
-        // if (isset($params['client'])) $debugInfo['client'] = $params['client'];
-
         // FIlters
         if (isset($params['house_filters'])) {
-            // $debugInfo['house_filters'] = $params['house_filters'];
-
             $houseFilters = json_decode($params['house_filters']);
 
             // House count filter
             if (isset($houseFilters->houseCount)) $house_count = $houseFilters->houseCount;
 
             // House Bugdet filter
-            if (isset($houseFilters->rentFeeExact)) {
-                $houses->where('rent_fee', $houseFilters->rentFeeExact);
-            } else if (isset($houseFilters->rentFeeFrom) && isset($houseFilters->rentFeeTo)) {
-                $houses->whereBetween('rent_fee', [$houseFilters->rentFeeFrom, $houseFilters->rentFeeTo]);
+            if (isset($houseFilters->priceRange)) {
+                if (!$houseFilters->priceRange->any) {
+                    if ($houseFilters->priceRange->useSpecificPrice) // Use Specific price
+                        $houses->where('rent', $houseFilters->priceRange->specificPrice);
+                    else // Use range
+                        $houses->whereBetween('rent', [$houseFilters->priceRange->from, $houseFilters->priceRange->to]);
+                }
             }
 
             // Rooms Filter
             if (isset($houseFilters->rooms)) {
-                if ($houseFilters->rooms != "") {
-                    if (!in_array("Any", explode(',', $houseFilters->rooms))) {
-                        $houses->whereIn('number_of_rooms', explode(',', $houseFilters->rooms));
+                if (!$houseFilters->rooms->any) {
+                    $rooms = [];
+                    if ($houseFilters->rooms->useSpecificRooms) { // Use specific
+                        foreach ($houseFilters->rooms->specificRooms as $room) $rooms[] = $room->value;
+                        $houses->whereIn('rooms', $rooms);
+                    } else { // Use range
+                        foreach ($houseFilters->rooms->rooms as $room) $rooms[] = $room->value;
+                        $houses->whereIn('rooms', $rooms);
                     }
                 }
             }
 
             // Location filter
-            if (isset($houseFilters->additionalLocations) && !empty($houseFilters->additionalLocations)) {
-                $location_ids = Location::whereIn('name', array_column($houseFilters->additionalLocations, 'desc'))->pluck('id')->toArray();
-                $houses->whereIn('location_id', $location_ids);
+            if (isset($houseFilters->locations)) {
+                if (!$houseFilters->locations->any) {
+                    $locationIds = [];
+                    foreach ($houseFilters->locations->locations as $location) $locationIds[] = $location->id;
+                    $houses->whereIn('location_id', $locationIds);
+                }
             }
         }
 
@@ -60,13 +64,14 @@ class HousesController extends Controller
             $house->location;
             $house->images;
             $house->landlords;
+            foreach ($house->landlords as $landlord) {
+                $landlord->contacts;
+            }
         }
 
-        // More filters
         return response([
             'success' => true,
             'houses' => $houses->toArray(),
-            // 'debug_info' => $debugInfo
         ], 201);
     }
 }

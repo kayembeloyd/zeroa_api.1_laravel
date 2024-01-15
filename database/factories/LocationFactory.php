@@ -27,16 +27,6 @@ class LocationFactory extends Factory
                 "Kamuzu Institute", "Malingunde", "Namitete", "Kawale", "Madziabango", "Nankhaka", "Malingunde", "Bunda",
                 "Bwaila", "Kamudzi", "Kanengo", "Sosola", "Mvunguti", "Mzuzu Road", "Civo Stadium", "Likuni Boys Secondary School"
             ]),
-            // 'name' => $this->faker->word(),
-            // 'region' => $this->faker->randomElement([
-            //     "Central", "North", "South"
-            // ]),
-            'region' => "Central",
-            // 'district' => $this->faker->unique()->randomElement([
-            //     "Chitipa", "Karonga", "Likoma", "Mzimba", "Nkhata Bay", "Rumphi", "Dedza", "Dowa", "Kasungu", "Lilongwe", "Mchinji", "Nkhotakota", "Ntcheu", "Ntchisi", "Salima", "Balaka", "Blantyre", "Chikwawa", "Chiradzulu", "Machinga", "Mangochi", "Mulanje", "Mwanza", "Neno", "Nsanje", "Phalombe", "Thyolo", "Zomba",
-            // ]),
-            'district' => "Lilongwe",
-            'description' => $this->faker->paragraph(),
         ];
     }
 }

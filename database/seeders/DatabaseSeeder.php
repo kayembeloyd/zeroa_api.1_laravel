@@ -45,15 +45,24 @@ class DatabaseSeeder extends Seeder
         }
         echo ("Finished Seeding " . $NUMBER_OF_IMAGES_FOR_EACH_HOUSE . " images for each of the " . $NUMBER_OF_HOUSES . " houses\n");
 
-        // Landlord (contacts)
-        $NUMBER_OF_LANDLORD_CONTACTS_FOR_EACH_HOUSE = 2;
+        // Landlords
+        $NUMBER_OF_LANDLORDS_FOR_EACH_HOUSE = 2;
 
-        echo ('Seeding landlord (contacts)...\n');
-        $landlords = \App\Models\Landlord::factory($NUMBER_OF_LANDLORD_CONTACTS_FOR_EACH_HOUSE * $NUMBER_OF_HOUSES)->create();
+        echo ('Seeding landlords...\n');
+        $landlords = \App\Models\Landlord::factory($NUMBER_OF_LANDLORDS_FOR_EACH_HOUSE * $NUMBER_OF_HOUSES)->create();
         foreach ($houses as $house) {
             $house->landlords()->save($landlords->random());
         }
-        echo ("Finished Seeding " . $NUMBER_OF_LANDLORD_CONTACTS_FOR_EACH_HOUSE . " landlord contacts for each of the " . $NUMBER_OF_HOUSES . " houses\n");
+        echo ("Finished Seeding " . $NUMBER_OF_LANDLORDS_FOR_EACH_HOUSE . " landlords for each of the " . $NUMBER_OF_HOUSES . " houses\n");
+
+        // Contacts 
+        $NUMBER_OF_CONTACTS_PER_LANDLORD = 2;
+        echo ('Seeding contacts...\n');
+        foreach ($landlords as $landlord) {
+            $contacts = \App\Models\Contact::factory($NUMBER_OF_CONTACTS_PER_LANDLORD)->create();
+            $landlord->contacts()->saveMany($contacts);
+        }
+        echo ("Finished Seeding " . $NUMBER_OF_CONTACTS_PER_LANDLORD * $NUMBER_OF_LANDLORDS_FOR_EACH_HOUSE * $NUMBER_OF_HOUSES . " contacts for each landlord\n");
 
         // User houses 
         echo ('Seeding saved houses...\n');

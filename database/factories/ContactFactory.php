@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Landlord>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contact>
  */
-class LandlordFactory extends Factory
+class ContactFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,8 @@ class LandlordFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            "value" => $this->faker->phoneNumber(),
+            "type" => $this->faker->randomElement(['cell', 'whatsapp', 'email'])
         ];
     }
 }

@@ -9,13 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-
     public function up(): void
     {
-        Schema::create('locations', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('landlord_id')->nullable();
+            $table->string('value')->nullable();
+            $table->enum('type', ['cell', 'whatsapp', 'email'])->nullable();
             $table->timestamps();
+
+            $table->index('landlord_id');
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('contacts');
     }
 };

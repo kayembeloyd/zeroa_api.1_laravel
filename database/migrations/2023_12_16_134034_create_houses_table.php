@@ -15,13 +15,12 @@ return new class extends Migration
         Schema::create('houses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('location_id')->nullable();
-            $table->double('rent_fee')->nullable();
-            $table->string('rent_fee_inclusion')->nullable();
-            $table->unsignedInteger('installment_period')->nullable();
+            $table->double('rent')->nullable();
+            $table->string('payment_period')->nullable();
             $table->dateTime('available_on')->nullable();
-            $table->unsignedInteger('number_of_rooms')->nullable();
-            $table->unsignedInteger('number_of_views')->nullable();
-            $table->text('description')->nullable();
+            $table->unsignedInteger('rooms')->nullable();
+            $table->unsignedInteger('views')->nullable();
+            $table->text('details')->nullable();
             $table->timestamps();
 
             $table->index('location_id');
