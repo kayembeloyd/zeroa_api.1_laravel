@@ -10,8 +10,7 @@ class Landlord extends Model
     use HasFactory;
 
     protected $fillable = [
-        'phone_number',
-        'email',
+        'name',
     ];
 
     public function houses()

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/houses', [HousesController::class, 'index']);
+Route::post('/house/new', [HousesController::class, 'create']);
 Route::post('/locations', [LocationsController::class, 'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

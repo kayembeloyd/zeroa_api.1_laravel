@@ -9,6 +9,13 @@ class Contact extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'landlord_id',
+        'value',
+        'type',
+    ];
+
+
     public function landlord()
     {
         return $this->belongsTo(Landlord::class);

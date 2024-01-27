@@ -11,9 +11,6 @@ class Location extends Model
 
     protected $fillable = [
         'name',
-        'region',
-        'district',
-        'description',
     ];
 
     public function houses()

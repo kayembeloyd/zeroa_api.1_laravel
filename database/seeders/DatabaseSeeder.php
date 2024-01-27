@@ -12,6 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        echo ('Seeding locations...\n');
+        $locations = \App\Models\Location::factory(70)->create();
+
+        /*
         // Users
         $NUMBER_OF_USERS = 5;
 
@@ -69,6 +73,6 @@ class DatabaseSeeder extends Seeder
         foreach ($users as $user) {
             $user->houses()->save($houses->random());
         }
-        echo ("Finished Seeding atleast one saved house for each of the " . $NUMBER_OF_HOUSES . " houses \n");
+        echo ("Finished Seeding atleast one saved house for each of the " . $NUMBER_OF_HOUSES . " houses \n"); */
     }
 }

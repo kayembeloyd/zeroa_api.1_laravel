@@ -11,13 +11,12 @@ class House extends Model
 
     protected $fillable = [
         'location_id',
-        'rent_fee',
-        'rent_fee_inclusion',
-        'installment_period',
+        'rent',
+        'payment_period',
         'available_on',
-        'number_of_rooms',
-        'number_of_views',
-        'description',
+        'rooms',
+        'views',
+        'details',
     ];
 
     public function attributes()
