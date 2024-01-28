@@ -86,56 +86,66 @@ class HousesController extends Controller
         $house = new House();
 
         // House general information
-        $house->rent = $request->rent;
-        $house->payment_period = $request->paymentPeriod;
-        $house->available_on = Carbon::parse($request->availableOn)->format('Y-m-d H:i:s');
-        $house->rooms = $request->rooms;
+        $house->rent = $request->rent ?? 0;
+        $house->payment_period = $request->payment_period ?? 1;
+        $house->available_on = isset($request->available_on) ?
+            Carbon::parse($request->available_on)->format('Y-m-d H:i:s') :
+            Carbon::now()->format('Y-m-d H:i:s');
+        $house->rooms = $request->rooms ?? 0;
         $house->views = 0;
-        $house->details = $request->details;
+        $house->details = $request->details ?? "";
 
-        $house->save();
+        $house->save(); // Save house general information
 
         // Fetch a location
-        $location = Location::find(json_decode($request->location)->id);
-        if ($location) $house->location()->associate($location);
+        if (isset($request->location)) {
+            $location = Location::find(json_decode($request->location)->id);
+            if ($location) $house->location()->associate($location);
 
-        $house->save();
+            $house->save(); // Save location
+        }
+
 
         // Landlord
-        $landlord = Landlord::where('name', $request->landlordName)->first();
-        if ($landlord) {
-            // assign to tha
-            $house->landlords()->save($landlord);
-        } else {
-            $landlord = new Landlord();
-            $landlord->name = $request->landlordName;
-            $house->landlords()->save($landlord);
+        if (isset($request->landlordName)) {
+            $landlord = Landlord::where('name', $request->landlordName)->first();
 
-            $landlordContacts = json_decode($request->landlordContacts);
+            if ($landlord) {
+                // assign to tha
+                $house->landlords()->save($landlord);
+            } else {
+                $landlord = new Landlord();
+                $landlord->name = $request->landlordName;
+                $house->landlords()->save($landlord);
 
-            foreach ($landlordContacts as $landlordContact) {
-                $lc = new Contact();
-                $lc->value = $landlordContact->value;
-                $lc->type = "cell";
-                $landlord->contacts()->save($lc);
+                $landlordContacts = json_decode($request->landlordContacts);
+
+                foreach ($landlordContacts as $landlordContact) {
+                    $lc = new Contact();
+                    $lc->value = $landlordContact->value;
+                    $lc->type = "cell";
+                    $landlord->contacts()->save($lc);
+                }
             }
+
+            $house->save(); // save landlords
         }
 
-        $house->save();
-
-        // Image
-        $imageCount = $request->imageCount;
-        for ($i = 0; $i < $imageCount; $i++) {
-            if ($request->hasFile('image' . ($i + 1))) {
-                $image = new Image;
-                $path = $request->file('image' . ($i + 1))->store('public/images');
-                $image->path = $path;
-                $image->save();
-                $house->images()->save($image);
+        // Images
+        if (isset($request->imageCount)) {
+            $imageCount = $request->imageCount;
+            for ($i = 0; $i < $imageCount; $i++) {
+                if ($request->hasFile('image' . ($i + 1))) {
+                    $image = new Image;
+                    $path = $request->file('image' . ($i + 1))->store('public/images');
+                    $image->path = $path;
+                    $image->save();
+                    $house->images()->save($image);
+                }
             }
-        }
 
-        $house->save();
+            $house->save(); // save images
+        }
 
         echo (json_encode($house));
     }
